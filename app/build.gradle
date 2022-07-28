@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'dagger.hilt.android.plugin'
@@ -30,8 +29,8 @@ android {
         }
 
         debug {
-            buildConfigField("String", "API_KEY", "\"\"")
-            buildConfigField("String", "BASE_URL", "\"\"")
+            buildConfigField("String", "API_KEY", "\"a8613e4c-e77b-4728-ae64-d8295f31abf9\"")
+            buildConfigField("String", "BASE_URL", "\"https://holidayapi.com/\"")
         }
     }
 
@@ -76,7 +75,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit"
     implementation "com.squareup.moshi:moshi-kotlin:$moshi"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_codegen"
+    annotationProcessor "com.squareup.moshi:moshi-kotlin-codegen:$moshi_codegen"
     implementation "com.squareup.okhttp3:okhttp:$okhttp"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_interceptor"
 
@@ -101,5 +100,5 @@ dependencies {
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodels"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    annotationProcessor "com.google.dagger:hilt-compiler:$hilt_version"
 }
