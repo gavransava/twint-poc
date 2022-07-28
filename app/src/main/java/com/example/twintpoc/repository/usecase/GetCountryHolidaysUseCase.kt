@@ -9,6 +9,6 @@ import javax.inject.Singleton
 
 @Singleton
 class GetCountryHolidaysUseCase @Inject constructor(private val dataRepository: DataRepository) {
-    suspend fun requestHolidays(country: String, year: String): Flow<Resource<ArrayList<Holiday>>> =
+    suspend fun requestHolidays(country: String, year: String): Flow<Resource<List<Holiday>>> =
         dataRepository.requestHolidays(country, year)
 }

@@ -18,8 +18,8 @@ class DataRepository @Inject constructor(
     private val networkConnectivity: NetworkConnectivity,
     private val holidayService: HolidayService,
     private val ioDispatcher: CoroutineContext
-) {
-    suspend fun requestHolidays(country: String, year: String): Flow<Resource<ArrayList<Holiday>>> {
+) : DataRepositoryInt {
+    override suspend fun requestHolidays(country: String, year: String): Flow<Resource<List<Holiday>>> {
         return flow {
             emit(
                 when (val response = processCall(holidayService, country, year)) {

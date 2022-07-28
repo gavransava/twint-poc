@@ -8,7 +8,6 @@ import com.example.twintpoc.network.model.Holiday
 import com.example.twintpoc.repository.usecase.GetCountryHolidaysUseCase
 import com.example.twintpoc.view.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,10 +16,10 @@ class MainViewModel @Inject constructor(
     private val getCountryHolidaysUseCase: GetCountryHolidaysUseCase
 ) : BaseViewModel() {
 
-    private val holidayPrivate = MutableLiveData<Resource<ArrayList<Holiday>>>()
-    val holidayData: LiveData<Resource<ArrayList<Holiday>>> get() = holidayPrivate
+    private val holidayPrivate = MutableLiveData<Resource<List<Holiday>>>()
+    val holidayData: LiveData<Resource<List<Holiday>>> get() = holidayPrivate
 
-    fun requestHolidays(country: String, year: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun requestHolidays(country: String, year: String) = viewModelScope.launch {
         holidayPrivate.value = Resource.Loading()
         getCountryHolidaysUseCase.requestHolidays(country, year).collect {
             holidayPrivate.value = it

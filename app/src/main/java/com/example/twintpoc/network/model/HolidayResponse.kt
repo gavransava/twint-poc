@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class HolidayResponse(
     @Json(name = "holidays")
-    val holidays: ArrayList<Holiday>,
+    val holidays: List<Holiday>,
     @Json(name = "requests")
     val requests: Requests,
     @Json(name = "status")

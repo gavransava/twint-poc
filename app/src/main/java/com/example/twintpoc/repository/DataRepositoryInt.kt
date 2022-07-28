@@ -5,5 +5,5 @@ import com.example.twintpoc.network.model.Holiday
 import kotlinx.coroutines.flow.Flow
 
 interface DataRepositoryInt {
-    suspend fun requestHolidays(country: String, year: String): Flow<Resource<ArrayList<Holiday>>>
+    suspend fun requestHolidays(country: String, year: String): Flow<Resource<List<Holiday>>>
 }

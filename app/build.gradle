@@ -2,6 +2,9 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id 'kotlinx-serialization'
     id 'dagger.hilt.android.plugin'
 }
 
@@ -61,6 +64,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization"
 
     // Core Android dependencies
     implementation "androidx.core:core-ktx:$core_ktx"
@@ -75,7 +79,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit"
     implementation "com.squareup.moshi:moshi-kotlin:$moshi"
-    annotationProcessor "com.squareup.moshi:moshi-kotlin-codegen:$moshi_codegen"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_codegen"
     implementation "com.squareup.okhttp3:okhttp:$okhttp"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_interceptor"
 
@@ -99,6 +103,8 @@ dependencies {
 
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodels"
-    annotationProcessor "com.google.dagger:hilt-compiler:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+}
+kapt {
+    correctErrorTypes true
 }
