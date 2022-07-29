@@ -29,3 +29,4 @@ Navigation between the screens has been done using the Jetpack Navigation librar
 - [Retrofit](https://square.github.io/retrofit/)
 - [Hilt](https://dagger.dev/hilt/) for dependency injection
 - [Android KTX](https://developer.android.com/kotlin/ktx) features
+- [CountryCodePicker](https://github.com/hbb20/CountryCodePickerProject)

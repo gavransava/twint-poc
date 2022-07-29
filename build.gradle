@@ -55,4 +55,5 @@ ext {
     activity_ktx='1.5.1'
     fragment_ktx='1.5.1'
     core_ktx='1.8.0'
+    country_picker='2.5.4'
 }

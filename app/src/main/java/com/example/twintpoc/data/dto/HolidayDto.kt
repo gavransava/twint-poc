@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class HolidayDto(
     val name: String,
-    val observed: String
+    val observedDate: String
 ) : Parcelable

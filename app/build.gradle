@@ -104,6 +104,9 @@ dependencies {
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    // CountryPicker
+    implementation "com.hbb20:ccp:$country_picker"
 }
 kapt {
     correctErrorTypes true

@@ -2,4 +2,6 @@
     <string name="app_name">TwintPoc</string>
     <string name="no_internet">Please check your internet connection</string>
     <string name="network_error">Network error, could not get data, please try again!</string>
+    <string name="public_holidays">Public Holidays</string>
+    <string name="fetch_holidays">Get Holidays</string>
 </resources>

@@ -5,8 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class HolidayDataDto(
-    val countryOneName: String,
-    val countryTwoName: String,
-    val countryOneHolidays: ArrayList<HolidayDto>,
-    val countryTwoHolidays: ArrayList<HolidayDto>
+    var countryOneName: String = "",
+    var countryTwoName: String = "",
+    var countryOneHolidays: ArrayList<HolidayDto> = arrayListOf(),
+    var countryTwoHolidays: ArrayList<HolidayDto> = arrayListOf()
 ) : Parcelable
