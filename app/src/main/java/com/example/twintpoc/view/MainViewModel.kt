@@ -31,18 +31,24 @@ class MainViewModel @Inject constructor(
         holidayPrivate.value = SingleEvent(Resource.Loading())
         firstCountryCode = country1
         secondCountryCode = country2
-        val deferred1 = viewModelScope.async {
+        if (country1 == country2) {
             getCountryHolidaysUseCase.requestHolidays(country1, year).collect {
                 holidayPrivate.value = SingleEvent(it)
             }
-        }
-        val deferred2 = viewModelScope.async {
-            getCountryHolidaysUseCase.requestHolidays(country2, year).collect {
-                holidayPrivate.value = SingleEvent(it)
+        } else {
+            val deferred1 = viewModelScope.async {
+                getCountryHolidaysUseCase.requestHolidays(country1, year).collect {
+                    holidayPrivate.value = SingleEvent(it)
+                }
             }
+            val deferred2 = viewModelScope.async {
+                getCountryHolidaysUseCase.requestHolidays(country2, year).collect {
+                    holidayPrivate.value = SingleEvent(it)
+                }
+            }
+            deferred1.await()
+            deferred2.await()
         }
-        deferred1.await()
-        deferred2.await()
     }
 
     fun showToastMessage(errorCode: Int) {

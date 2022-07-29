@@ -2,7 +2,7 @@
 buildscript {
     ext.kotlin_version = '1.7.10'
     ext.hilt_version ='2.43'
-    ext.navigation ='2.4.2'
+    ext.navigation ='2.5.1'
 
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.3"
