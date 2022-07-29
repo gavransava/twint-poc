@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_country_fragment_to_holiday_fragment"
             app:destination="@id/holiday_fragment">
-            <argument
-                android:name="holidayData"
-                app:argType="com.example.twintpoc.data.dto.HolidayDataDto" />
         </action>
     </fragment>
 
@@ -24,9 +21,13 @@
         android:name="com.example.twintpoc.view.holidays.HolidayFragment"
         android:label="Holiday List"
         tools:layout="@layout/fragment_holiday">
+        <argument
+            android:name="holidayData"
+            app:argType="com.example.twintpoc.data.dto.HolidayDataDto" />
         <action
             android:id="@+id/action_holiday_fragment_to_country_fragment"
-            app:popUpTo="@id/country_fragment" />
+            app:destination="@id/country_fragment"
+            app:popUpTo="@id/country_fragment"/>
     </fragment>
 
 </navigation>

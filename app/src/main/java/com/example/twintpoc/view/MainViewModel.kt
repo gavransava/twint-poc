@@ -18,22 +18,27 @@ class MainViewModel @Inject constructor(
     private val getCountryHolidaysUseCase: GetCountryHolidaysUseCase
 ) : BaseViewModel() {
 
-    private val holidayPrivate = MutableLiveData<Resource<List<Holiday>>>()
-    val holidayData: LiveData<Resource<List<Holiday>>> get() = holidayPrivate
+    var firstCountryCode : String = ""
+    var secondCountryCode : String = ""
+
+    private val holidayPrivate = MutableLiveData<SingleEvent<Resource<List<Holiday>>>>()
+    val holidayData: LiveData<SingleEvent<Resource<List<Holiday>>>> get() = holidayPrivate
 
     private val showToastPrivate = MutableLiveData<SingleEvent<Any>>()
     val showToast: LiveData<SingleEvent<Any>> get() = showToastPrivate
 
-    fun requestHolidays(country1: String, country2: String, year: String) = viewModelScope.launch{
-        holidayPrivate.value = Resource.Loading()
+    fun requestHolidays(country1: String, country2: String, year: String) = viewModelScope.launch {
+        holidayPrivate.value = SingleEvent(Resource.Loading())
+        firstCountryCode = country1
+        secondCountryCode = country2
         val deferred1 = viewModelScope.async {
             getCountryHolidaysUseCase.requestHolidays(country1, year).collect {
-                holidayPrivate.value = it
+                holidayPrivate.value = SingleEvent(it)
             }
         }
         val deferred2 = viewModelScope.async {
             getCountryHolidaysUseCase.requestHolidays(country2, year).collect {
-                holidayPrivate.value = it
+                holidayPrivate.value = SingleEvent(it)
             }
         }
         deferred1.await()
