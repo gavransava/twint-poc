@@ -15,6 +15,10 @@ import com.example.twintpoc.data.dto.HolidayDto
 import com.example.twintpoc.databinding.FragmentHolidayBinding
 
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class HolidayFragment : Fragment() {
@@ -23,9 +27,9 @@ class HolidayFragment : Fragment() {
     private val args: HolidayFragmentArgs by navArgs()
     private lateinit var rvAdapter: HolidayListAdapter
 
-    private val onlyCountryOneHolidays: ArrayList<HolidayDto> = arrayListOf()
-    private val commonHolidays: ArrayList<HolidayDto> = arrayListOf()
-    private val onlyCountryTwoHolidays: ArrayList<HolidayDto> = arrayListOf()
+    private var onlyCountryOneHolidays: ArrayList<HolidayDto> = arrayListOf()
+    private var commonHolidays: ArrayList<HolidayDto> = arrayListOf()
+    private var onlyCountryTwoHolidays: ArrayList<HolidayDto> = arrayListOf()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -63,7 +67,8 @@ class HolidayFragment : Fragment() {
         binding.rvHolidays.layoutManager = layoutManager
         rvAdapter = HolidayListAdapter(commonHolidays)
         binding.rvHolidays.adapter = rvAdapter
-        binding.selectedLabel.text = args.holidayData.countryOneName + " ∩ " + args.holidayData.countryTwoName
+        binding.selectedLabel.text =
+            args.holidayData.countryOneName + " ∩ " + args.holidayData.countryTwoName
     }
 
     private fun setupHolidayLists() {
@@ -79,17 +84,73 @@ class HolidayFragment : Fragment() {
 
         args.holidayData.countryOneHolidays.forEach { holidayOne ->
             if (countryTwoHolidayDates.contains(holidayOne.observedDate)) {
-                commonHolidays.add(holidayOne)
+                commonHolidays.add(holidayOne.copy(observedDate = formatDate(holidayOne.observedDate)))
             } else {
-                onlyCountryOneHolidays.add(holidayOne)
+                onlyCountryOneHolidays.add(holidayOne.copy(observedDate = formatDate(holidayOne.observedDate)))
             }
         }
 
         args.holidayData.countryTwoHolidays.forEach { holidayTwo ->
             if (!countryOneHolidayDates.contains(holidayTwo.observedDate)) {
-                onlyCountryTwoHolidays.add(holidayTwo)
+                onlyCountryTwoHolidays.add(holidayTwo.copy(observedDate = formatDate((holidayTwo.observedDate))))
             }
         }
+
+        onlyCountryOneHolidays = collapseContiguousHolidays(onlyCountryOneHolidays)
+        commonHolidays = collapseContiguousHolidays(commonHolidays)
+        onlyCountryTwoHolidays = collapseContiguousHolidays(onlyCountryTwoHolidays)
+    }
+
+    private fun formatDate(observedDate: String): String {
+        val dateFormatDateAndTime = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date: Date? = dateFormatDateAndTime.parse(observedDate)
+        return android.text.format.DateFormat.format("dd-MM-yyyy", date).toString()
+    }
+
+    private fun collapseContiguousHolidays(holidays: ArrayList<HolidayDto>): ArrayList<HolidayDto> {
+        var i = -1
+        val result: ArrayList<HolidayDto> = arrayListOf()
+        holidays.forEachIndexed { index, holidayDto ->
+            if (index > i) {
+                i = index
+                val startDate = holidays[i].observedDate
+                val holidayName = holidays[i].name
+                var endDate: String
+                while (i + 1 <= holidays.size) {
+                    if (i + 1 != holidays.size && isContiguous(holidays[i], holidays[i + 1]))
+                        i++
+                    else {
+                        endDate = holidays[i].observedDate
+                        if (startDate != endDate) {
+                            result.add(HolidayDto(holidayName, "$startDate to $endDate"))
+                        } else {
+                            result.add(HolidayDto(holidays[i].name, holidays[i].observedDate))
+                        }
+                        break
+                    }
+                }
+            }
+        }
+        return result
+    }
+
+    private fun isContiguous(day: HolidayDto, nextDay: HolidayDto): Boolean {
+        val dateFormatDateAndTime = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val date1: Date? = dateFormatDateAndTime.parse(day.observedDate)
+        val date2: Date? = dateFormatDateAndTime.parse(nextDay.observedDate)
+        date1?.let { d1 ->
+            date2?.let { d2 ->
+                val cal1 = Calendar.getInstance()
+                cal1.timeInMillis = d1.time
+                cal1.add(Calendar.DAY_OF_MONTH, 1)
+                val cal2 = Calendar.getInstance()
+                cal2.timeInMillis = d2.time
+                return@isContiguous if (cal1.equals(cal2))
+                    return true
+                else false
+            }
+        }
+        return false
     }
 
     private fun setupButtons() {
@@ -110,7 +171,8 @@ class HolidayFragment : Fragment() {
         }
         binding.onlyCountryTwoHolidays.setOnClickListener {
             rvAdapter.setData(onlyCountryTwoHolidays)
-            binding.selectedLabel.text = args.holidayData.countryTwoName + " w/o " + args.holidayData.countryOneName
+            binding.selectedLabel.text =
+                args.holidayData.countryTwoName + " w/o " + args.holidayData.countryOneName
         }
     }
 }
